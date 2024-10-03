@@ -11,7 +11,13 @@ class DroneCanNode
 {
     public:
 
+        void initiate_and_switch_to_op_mode(const char *interface_name);
+
         void start_node(const char *interface_name);
+
+        void set_esc_raw(int16_t raw_value[NUM_ESCS]);
+
+        void get_esc_rpm(int32_t rpm[NUM_ESCS]);
 
     private:
 
@@ -39,9 +45,13 @@ class DroneCanNode
         uavcan_equipment_esc_RPMCommand rpm_cmd_;
         uavcan_equipment_esc_RawCommand raw_cmd_;
 
-        int32_t actual_rpm[4] = {0, 0, 0, 0};
-        float actual_current[4] = {0, 0, 0, 0};
+        int32_t actual_rpm_[NUM_ESCS] = {0, 0, 0, 0};
+        float actual_current_[NUM_ESCS] = {0, 0, 0, 0};
+
+        int16_t raw_value_[NUM_ESCS] = {0, 0, 0, 0};
         int8_t esc_count_{0};
+
+        uint64_t next_1hz_service_at_{0};
 
 };
 

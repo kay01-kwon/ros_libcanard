@@ -1,29 +1,27 @@
 #include "drone_can_node.hpp"
 
-
-void DroneCanNode::start_node(const char *interface_name)
+void DroneCanNode::initiate_and_switch_to_op_mode(const char *interface_name)
 {
     canard_iface_.init(interface_name);
 
     uint8_t node_id = canard_iface_.get_node_id();
 
-    int32_t operation[4] = {10, 10, 10, 10};
-    int16_t raw[4] = {10, 10, 10, 10};
+    // int32_t rpm_op[4] = {10, 10, 10, 10};
+    int16_t raw_op[4] = {10, 10, 10, 10};
 
     printf("DroneCanNode started on %s, node ID %d\n", 
     interface_name, canard_iface_.get_node_id());
 
     /*
-      Run the main loop.
-     */
-    uint64_t next_1hz_service_at = micros64();
+    Run the main loop.
+    */
 
     send_NodeStatus();
     canard_iface_.process(10);
 
     uavcan_protocol_GetNodeInfoRequest req;
     
-    for(size_t i = 1; i < 5; i++) {
+    for(size_t i = 1; i < NUM_ESCS + 1; i++) {
         
         printf("Requesting node info for node %ld\n", i);
         req = {};
@@ -35,50 +33,58 @@ void DroneCanNode::start_node(const char *interface_name)
 
     // broadcast_RPMCommand(operation);
 
-    broadcast_RawCommand(raw);
+    broadcast_RawCommand(raw_op);
 
+}
 
-    while (true) {
-    
+void DroneCanNode::start_node(const char *interface_name)
+{
+   
         uint64_t ts = micros64();
 
-        if (ts >= next_1hz_service_at) {
-            next_1hz_service_at += 1000000ULL;
+        if (ts >= next_1hz_service_at_) {
+            next_1hz_service_at_ += 1000000ULL;
             send_NodeStatus();
         }
 
         canard_iface_.process(10);
-    }
+}
+
+void DroneCanNode::set_esc_raw(int16_t raw_value[NUM_ESCS])
+{
+    for(size_t i = 0; i < NUM_ESCS ; i++)
+        raw_value_[i] = raw_value[i];
+}
+
+void DroneCanNode::get_esc_rpm(int32_t rpm[NUM_ESCS])
+{
+    for(size_t i = 0; i < NUM_ESCS ; i++)
+        rpm[i] = actual_rpm_[i];
 }
 
 void DroneCanNode::handle_EscStatus(const CanardRxTransfer &transfer, 
 const uavcan_equipment_esc_Status &msg)
 {
-    // int32_t rpm[4] = {4000, 5000, 5000, 5000};
-    // int16_t raw_value = 8191;
-    int16_t raw_value = 0;
-    int16_t raw[4] = {raw_value, raw_value, raw_value, raw_value};
-
 
     switch(msg.esc_index) {
         case 0:
-            actual_rpm[0] = msg.rpm;
-            actual_current[0] = msg.current;
+            actual_rpm_[0] = msg.rpm;
+            actual_current_[0] = msg.current;
             esc_count_++;
             break;
         case 1:
-            actual_rpm[1] = msg.rpm;
-            actual_current[1] = msg.current;
+            actual_rpm_[1] = msg.rpm;
+            actual_current_[1] = msg.current;
             esc_count_++;
             break;
         case 2:
-            actual_rpm[2] = msg.rpm;
-            actual_current[2] = msg.current;
+            actual_rpm_[2] = msg.rpm;
+            actual_current_[2] = msg.current;
             esc_count_++;
             break;
         case 3:
-            actual_rpm[3] = msg.rpm;
-            actual_current[3] = msg.current;
+            actual_rpm_[3] = msg.rpm;
+            actual_current_[3] = msg.current;
             esc_count_++;
             break;
         default:
@@ -91,24 +97,24 @@ const uavcan_equipment_esc_Status &msg)
         printf("Voltage: %lf\n", msg.voltage);
 
         printf("Current: %lf %lf %lf %lf\n",
-        actual_current[0],
-        actual_current[1],
-        actual_current[2],
-        actual_current[3]);
+        actual_current_[0],
+        actual_current_[1],
+        actual_current_[2],
+        actual_current_[3]);
 
         printf("Actual RPM: %d %d %d %d\n", 
-        actual_rpm[0],
-        actual_rpm[1], 
-        actual_rpm[2], 
-        actual_rpm[3]);
+        actual_rpm_[0],
+        actual_rpm_[1], 
+        actual_rpm_[2], 
+        actual_rpm_[3]);
 
         printf("Command Raw: %d %d %d %d\n",
-        raw[0],
-        raw[1],
-        raw[2],
-        raw[3]);
+        raw_value_[0],
+        raw_value_[1],
+        raw_value_[2],
+        raw_value_[3]);
 
-        broadcast_RawCommand(raw);
+        broadcast_RawCommand(raw_value_);
 
         printf("****************************************\n");
     }
@@ -148,11 +154,11 @@ void DroneCanNode::broadcast_RPMCommand(int32_t rpm[NUM_ESCS])
     esc_rpm_pub_.broadcast(rpm_cmd_);
 }
 
-void DroneCanNode::broadcast_RawCommand(int16_t throttle[NUM_ESCS])
+void DroneCanNode::broadcast_RawCommand(int16_t raw[NUM_ESCS])
 {
     raw_cmd_.cmd.len = NUM_ESCS;
     for (size_t i = 0; i < NUM_ESCS; i++) {
-        raw_cmd_.cmd.data[i] = throttle[i];
+        raw_cmd_.cmd.data[i] = raw[i];
     }
     esc_raw_pub_.broadcast(raw_cmd_);
 }
