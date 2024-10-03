@@ -26,6 +26,7 @@ RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh, const char *interf
 
 void RosWrapperLibcanard::publish_actual_rpm()
 {
+    drone_can_node_.start_node();
     int32_t rpm[NUM_ESCS];
     drone_can_node_.get_esc_rpm(rpm);
 

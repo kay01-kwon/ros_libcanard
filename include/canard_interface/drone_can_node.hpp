@@ -13,7 +13,7 @@ class DroneCanNode
 
         void initiate_and_switch_to_op_mode(const char *interface_name);
 
-        void start_node(const char *interface_name);
+        void start_node();
 
         void set_esc_raw(int16_t raw_value[NUM_ESCS]);
 

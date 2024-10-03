@@ -37,7 +37,7 @@ void DroneCanNode::initiate_and_switch_to_op_mode(const char *interface_name)
 
 }
 
-void DroneCanNode::start_node(const char *interface_name)
+void DroneCanNode::start_node()
 {
    
         uint64_t ts = micros64();
@@ -47,7 +47,7 @@ void DroneCanNode::start_node(const char *interface_name)
             send_NodeStatus();
         }
 
-        canard_iface_.process(10);
+        canard_iface_.process(1);
 }
 
 void DroneCanNode::set_esc_raw(int16_t raw_value[NUM_ESCS])
@@ -91,7 +91,7 @@ const uavcan_equipment_esc_Status &msg)
             break;
     }
 
-    if(esc_count_ == 4) {
+    if(esc_count_ == NUM_ESCS) {
         esc_count_ = 0;
 
         printf("Voltage: %lf\n", msg.voltage);
