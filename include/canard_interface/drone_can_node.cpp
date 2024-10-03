@@ -66,6 +66,7 @@ void DroneCanNode::handle_EscStatus(const CanardRxTransfer &transfer,
 const uavcan_equipment_esc_Status &msg)
 {
 
+
     switch(msg.esc_index) {
         case 0:
             actual_rpm_[0] = msg.rpm;
@@ -87,12 +88,12 @@ const uavcan_equipment_esc_Status &msg)
             actual_current_[3] = msg.current;
             esc_count_++;
             break;
-        default:
-            break;
     }
 
     if(esc_count_ == NUM_ESCS) {
         esc_count_ = 0;
+
+        printf("\n");
 
         printf("Voltage: %lf\n", msg.voltage);
 
