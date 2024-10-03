@@ -32,10 +32,14 @@ void RosWrapperLibcanard::publish_actual_rpm()
     drone_can_node_.get_esc_rpm(rpm);
 
     ros_libcanard::actual_rpm rpm_msg;
+
+    rpm_msg.stamp = ros::Time::now();
+
     for(size_t i = 0; i < NUM_ESCS; i++)
     {
         rpm_msg.rpm[i] = rpm[i];
     }
+
     actual_rpm_pub_.publish(rpm_msg);
 }
 
