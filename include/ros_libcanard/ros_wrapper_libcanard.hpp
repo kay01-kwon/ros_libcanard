@@ -8,6 +8,7 @@
 
 #include "ros_libcanard/actual_rpm.h"
 #include "ros_libcanard/cmd_raw.h"
+#include <std_msgs/Float32.h>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
@@ -34,6 +35,7 @@ class RosWrapperLibcanard
     void process_drone_can_process();
 
     ros::Publisher actual_rpm_pub_;
+    ros::Publisher voltage_pub_;
     ros::Subscriber raw_value_sub_;
 
     DroneCanNode drone_can_node_;

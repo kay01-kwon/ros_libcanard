@@ -50,16 +50,21 @@ void DroneCanNode::process_node()
         canard_iface_.process(1);
 }
 
-void DroneCanNode::set_esc_raw(int16_t raw_value[NUM_ESCS])
+void DroneCanNode::set_esc_raw(const int16_t raw_value[NUM_ESCS])
 {
     for(size_t i = 0; i < NUM_ESCS ; i++)
         raw_value_[i] = raw_value[i];
 }
 
-void DroneCanNode::get_esc_rpm(int32_t rpm[NUM_ESCS])
+void DroneCanNode::get_esc_rpm(int32_t rpm[NUM_ESCS]) const
 {
     for(size_t i = 0; i < NUM_ESCS ; i++)
         rpm[i] = actual_rpm_[i];
+}
+
+void DroneCanNode::get_voltage(float &voltage) const
+{
+    voltage = voltage_;
 }
 
 void DroneCanNode::handle_EscStatus(const CanardRxTransfer &transfer, 
@@ -96,6 +101,8 @@ const uavcan_equipment_esc_Status &msg)
         raw_value_[1],
         raw_value_[2],
         raw_value_[3]);
+
+        voltage_ = msg.voltage;
 
         broadcast_RawCommand(raw_value_);
 

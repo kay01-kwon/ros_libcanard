@@ -15,9 +15,11 @@ class DroneCanNode
 
         void process_node();
 
-        void set_esc_raw(int16_t raw_value[NUM_ESCS]);
+        void set_esc_raw(const int16_t raw_value[NUM_ESCS]);
 
-        void get_esc_rpm(int32_t rpm[NUM_ESCS]);
+        void get_esc_rpm(int32_t rpm[NUM_ESCS]) const;
+
+        void get_voltage(float &voltage) const;
 
 
     private:
@@ -48,6 +50,7 @@ class DroneCanNode
 
         int32_t actual_rpm_[NUM_ESCS] = {0, 0, 0, 0};
         float actual_current_[NUM_ESCS] = {0, 0, 0, 0};
+        float voltage_{0};
 
         int16_t raw_value_[NUM_ESCS] = {0, 0, 0, 0};
 

@@ -3,6 +3,8 @@
 RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh) : drone_can_node_{}
 {
     actual_rpm_pub_ = nh.advertise<ros_libcanard::actual_rpm>("actual_rpm", 1);
+    voltage_pub_ = nh.advertise<std_msgs::Float32>("voltage", 1);
+
     raw_value_sub_ = nh.subscribe<ros_libcanard::cmd_raw>("cmd_raw", 
     1, 
     &RosWrapperLibcanard::callback_cmd_raw, 
@@ -20,6 +22,8 @@ RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh) : drone_can_node_{
 RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh, const char *interface_name) : drone_can_node_{}
 {
     actual_rpm_pub_ = nh.advertise<ros_libcanard::actual_rpm>("actual_rpm", 1);
+    voltage_pub_ = nh.advertise<std_msgs::Float32>("voltage", 1);
+    
     raw_value_sub_ = nh.subscribe<ros_libcanard::cmd_raw>("cmd_raw", 
     1, 
     &RosWrapperLibcanard::callback_cmd_raw, 
@@ -47,9 +51,13 @@ void RosWrapperLibcanard::publish_actual_rpm()
 {
 
     int32_t rpm[NUM_ESCS];
+    float voltage;
+
     drone_can_node_.get_esc_rpm(rpm);
+    drone_can_node_.get_voltage(voltage);
 
     ros_libcanard::actual_rpm rpm_msg;
+    std_msgs::Float32 voltage_msg;
 
     rpm_msg.stamp = ros::Time::now();
 
@@ -58,7 +66,10 @@ void RosWrapperLibcanard::publish_actual_rpm()
         rpm_msg.rpm[i] = rpm[i];
     }
 
+    voltage_msg.data = voltage;
+
     actual_rpm_pub_.publish(rpm_msg);
+    voltage_pub_.publish(voltage_msg);
 }
 
 void RosWrapperLibcanard::callback_cmd_raw(const ros_libcanard::cmd_raw::ConstPtr &cmd_msg)
