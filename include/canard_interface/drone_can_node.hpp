@@ -13,11 +13,13 @@ class DroneCanNode
 
         void initiate_and_switch_to_op_mode(const char *interface_name);
 
-        void start_node();
+        void process_node();
 
         void set_esc_raw(int16_t raw_value[NUM_ESCS]);
 
         void get_esc_rpm(int32_t rpm[NUM_ESCS]);
+
+        bool is_broadcasted();
 
     private:
 
@@ -54,6 +56,8 @@ class DroneCanNode
         uint8_t esc_count_{0};
 
         uint64_t next_1hz_service_at_{0};
+
+        bool is_broadcasted_{false};
 
 };
 

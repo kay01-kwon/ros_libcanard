@@ -10,6 +10,9 @@ RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh) : drone_can_node_{
 
 
     drone_can_node_.initiate_and_switch_to_op_mode("can0");
+
+    drone_can_process_thread_ = boost::thread(&RosWrapperLibcanard::process_drone_can_process, this);
+    ros_run_thread_ = boost::thread(&RosWrapperLibcanard::ros_run, this);
 }
 
 RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh, const char *interface_name) : drone_can_node_{}
@@ -22,11 +25,22 @@ RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh, const char *interf
 
     drone_can_node_.initiate_and_switch_to_op_mode(interface_name);
 
+    drone_can_process_thread_ =
+    boost::thread(&RosWrapperLibcanard::process_drone_can_process,this);
+
+    ros_run_thread_ = boost::thread(&RosWrapperLibcanard::ros_run, this);
+
+}
+
+
+RosWrapperLibcanard::~RosWrapperLibcanard()
+{
+    drone_can_process_thread_.join();
+    ros_run_thread_.join();
 }
 
 void RosWrapperLibcanard::publish_actual_rpm()
 {
-    drone_can_node_.start_node();
 
     int32_t rpm[NUM_ESCS];
     drone_can_node_.get_esc_rpm(rpm);
@@ -51,6 +65,38 @@ void RosWrapperLibcanard::callback_cmd_raw(const ros_libcanard::cmd_raw::ConstPt
         raw_value[i] = cmd_msg->raw[i];
     }
     drone_can_node_.set_esc_raw(raw_value);
-    
 
+}
+
+void RosWrapperLibcanard::ros_run()
+{
+    
+    while(ros::ok())
+    {
+        boost::unique_lock<boost::mutex> lock(mtx_);
+    
+        cv_.wait(
+            lock,
+            [this]{
+            return drone_can_node_.is_broadcasted();
+                }
+            );
+        
+        publish_actual_rpm();
+        ros::spinOnce();
+        loop_rate_.sleep();
+    }
+
+}
+
+
+void RosWrapperLibcanard::process_drone_can_process()
+{
+    boost::lock_guard<boost::mutex> lock(mtx_);
+    while(ros::ok())
+    {
+        drone_can_node_.process_node();
+    }
+
+    cv_.notify_all();
 }

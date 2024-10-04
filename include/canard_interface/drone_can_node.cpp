@@ -37,7 +37,7 @@ void DroneCanNode::initiate_and_switch_to_op_mode(const char *interface_name)
 
 }
 
-void DroneCanNode::start_node()
+void DroneCanNode::process_node()
 {
    
         uint64_t ts = micros64();
@@ -62,9 +62,15 @@ void DroneCanNode::get_esc_rpm(int32_t rpm[NUM_ESCS])
         rpm[i] = actual_rpm_[i];
 }
 
+bool DroneCanNode::is_broadcasted()
+{
+    return is_broadcasted_;
+}
+
 void DroneCanNode::handle_EscStatus(const CanardRxTransfer &transfer, 
 const uavcan_equipment_esc_Status &msg)
 {
+    is_broadcasted_ = false;
     if(msg.esc_index != prev_ecs_index_) {
         esc_count_++;
     }
@@ -99,9 +105,10 @@ const uavcan_equipment_esc_Status &msg)
 
         broadcast_RawCommand(raw_value_);
 
+        is_broadcasted_ = true;
+
         printf("****************************************\n");
     }
-    
 
 }
 
