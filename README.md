@@ -43,8 +43,13 @@ raw:
 - 1000"
 ```
 
-Monitoring
+How to get actual rpm info in real time
 
 ```
 rostopic echo /actual_rpm
+```
+
+How to get voltage info in real time
+```
+rostopic echo /voltage
 ```
