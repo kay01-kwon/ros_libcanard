@@ -49,7 +49,9 @@ class DroneCanNode
         float actual_current_[NUM_ESCS] = {0, 0, 0, 0};
 
         int16_t raw_value_[NUM_ESCS] = {0, 0, 0, 0};
-        int8_t esc_count_{0};
+
+        uint8_t prev_ecs_index_{0};
+        uint8_t esc_count_{0};
 
         uint64_t next_1hz_service_at_{0};
 

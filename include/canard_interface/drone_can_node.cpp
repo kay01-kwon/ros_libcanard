@@ -65,30 +65,12 @@ void DroneCanNode::get_esc_rpm(int32_t rpm[NUM_ESCS])
 void DroneCanNode::handle_EscStatus(const CanardRxTransfer &transfer, 
 const uavcan_equipment_esc_Status &msg)
 {
-
-
-    switch(msg.esc_index) {
-        case 0:
-            actual_rpm_[0] = msg.rpm;
-            actual_current_[0] = msg.current;
-            esc_count_++;
-            break;
-        case 1:
-            actual_rpm_[1] = msg.rpm;
-            actual_current_[1] = msg.current;
-            esc_count_++;
-            break;
-        case 2:
-            actual_rpm_[2] = msg.rpm;
-            actual_current_[2] = msg.current;
-            esc_count_++;
-            break;
-        case 3:
-            actual_rpm_[3] = msg.rpm;
-            actual_current_[3] = msg.current;
-            esc_count_++;
-            break;
+    if(msg.esc_index != prev_ecs_index_) {
+        esc_count_++;
     }
+
+    actual_rpm_[msg.esc_index] = msg.rpm;
+    actual_current_[msg.esc_index] = msg.current;
 
     if(esc_count_ == NUM_ESCS) {
         esc_count_ = 0;
