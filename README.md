@@ -10,6 +10,8 @@ catkin_make
 
 ## can network setup
 
+Navigate to the can_setup folder, then execute the following command.
+
 ```
 ./setup_can.bash
 ```
