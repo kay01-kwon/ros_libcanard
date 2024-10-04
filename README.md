@@ -33,7 +33,7 @@ rosrun ros_libcanard ros_libcanard_node
 
 Terminal 3
 ```
-rostopic pub -r 500 /cmd_raw ros_libcanard/cmd_raw "stamp:
+rostopic pub -r 200 /cmd_raw ros_libcanard/cmd_raw "stamp:
   secs: 0
   nsecs: 0
 raw:
