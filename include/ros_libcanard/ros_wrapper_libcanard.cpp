@@ -96,7 +96,6 @@ void RosWrapperLibcanard::process_drone_can_process()
     while(ros::ok())
     {
         drone_can_node_.process_node();
+        cv_.notify_all();
     }
-
-    cv_.notify_all();
 }
