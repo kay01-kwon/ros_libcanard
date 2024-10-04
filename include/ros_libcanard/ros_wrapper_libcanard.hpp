@@ -46,6 +46,8 @@ class RosWrapperLibcanard
 
     ros::Rate loop_rate_{100};
 
+    bool data_ready_{false};
+
 };
 
 

@@ -8,14 +8,14 @@ int main(int argc, char** argv)
 
     RosWrapperLibcanard ros_wrapper_libcanard(nh);
 
-    ros::Rate loop_rate(500);
+    // ros::Rate loop_rate(500);
 
-    while(ros::ok())
-    {
-        ros_wrapper_libcanard.publish_actual_rpm();
-        ros::spinOnce();
-        loop_rate.sleep();
-    }
+    // while(ros::ok())
+    // {
+    //     ros_wrapper_libcanard.publish_actual_rpm();
+    //     ros::spinOnce();
+    //     loop_rate.sleep();
+    // }
 
     return 0;
 }
