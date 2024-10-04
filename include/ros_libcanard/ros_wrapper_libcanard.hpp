@@ -44,7 +44,7 @@ class RosWrapperLibcanard
     boost::mutex mtx_;
     boost::condition_variable cv_;
 
-    ros::Rate loop_rate_{100};
+    ros::Rate loop_rate_{200};
 
     bool data_ready_{false};
 
