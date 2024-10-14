@@ -53,3 +53,11 @@ How to get voltage info in real time
 ```
 rostopic echo /voltage
 ```
+
+## CMD raw value for desired RPM
+
+Max bit = 8191
+
+Max RPM = 9800
+
+Cmd raw value = $\frac{\text{Max bit}}{\text{Max RPM}} * \text{Des RPM}$
