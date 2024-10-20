@@ -1,3 +1,5 @@
+
+https://github.com/user-attachments/assets/58bbf78c-90a7-479b-a7a9-0437a68fbd74
 # ros_libcanard
 
 ## build
@@ -61,3 +63,10 @@ Max bit = 8191
 Max RPM = 9800
 
 Cmd raw value = $\frac{\text{Max bit}}{\text{Max RPM}} * \text{Des RPM}$
+
+## Motor test (Quadrotor)
+
+https://github.com/user-attachments/assets/0b4c9ef2-7f8a-426b-839c-b4a36b385996
+
+
+$
