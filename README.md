@@ -65,6 +65,3 @@ Cmd raw value = $\frac{\text{Max bit}}{\text{Max RPM}} * \text{Des RPM}$
 ## Motor test (Quadrotor)
 
 https://github.com/user-attachments/assets/0b4c9ef2-7f8a-426b-839c-b4a36b385996
-
-
-$
