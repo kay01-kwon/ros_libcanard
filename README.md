@@ -1,5 +1,3 @@
-
-https://github.com/user-attachments/assets/58bbf78c-90a7-479b-a7a9-0437a68fbd74
 # ros_libcanard
 
 ## build
