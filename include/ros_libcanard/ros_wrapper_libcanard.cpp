@@ -100,6 +100,5 @@ void RosWrapperLibcanard::process_drone_can_process()
     {
         boost::lock_guard<boost::mutex> lock(mtx_);
         drone_can_node_.process_node();
-        cv_.notify_one();
     }
 }

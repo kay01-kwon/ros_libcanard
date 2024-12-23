@@ -3,7 +3,7 @@
 #include "dsdl_generated/dronecan_msgs.h"
 #include "canard_interface/canard_interface.hpp"
 
-#define NUM_ESCS 4
+#define NUM_ESCS 1
 
 class CanardInterface;
 
@@ -48,11 +48,11 @@ class DroneCanNode
         uavcan_equipment_esc_RPMCommand rpm_cmd_;
         uavcan_equipment_esc_RawCommand raw_cmd_;
 
-        int32_t actual_rpm_[NUM_ESCS] = {0, 0, 0, 0};
-        float actual_current_[NUM_ESCS] = {0, 0, 0, 0};
+        int32_t actual_rpm_[NUM_ESCS];
+        float actual_current_[NUM_ESCS];
         float voltage_{0};
 
-        int16_t raw_value_[NUM_ESCS] = {0, 0, 0, 0};
+        int16_t raw_value_[NUM_ESCS];
 
         uint8_t prev_ecs_index_{0};
         uint8_t esc_count_{0};

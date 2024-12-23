@@ -6,8 +6,16 @@ void DroneCanNode::initiate_and_switch_to_op_mode(const char *interface_name)
 
     uint8_t node_id = canard_iface_.get_node_id();
 
-    // int32_t rpm_op[4] = {10, 10, 10, 10};
-    int16_t raw_op[4] = {10, 10, 10, 10};
+    int16_t raw_op[NUM_ESCS];
+
+    for(size_t i = 0; i < NUM_ESCS; i++)
+    {
+        actual_rpm_[i] = 0;
+        actual_current_[i] = 0;
+        raw_value_[i] = 0;
+        raw_op[i] = 10;
+    }
+    
 
     printf("DroneCanNode started on %s, node ID %d\n", 
     interface_name, canard_iface_.get_node_id());
@@ -40,14 +48,14 @@ void DroneCanNode::initiate_and_switch_to_op_mode(const char *interface_name)
 void DroneCanNode::process_node()
 {
    
-        uint64_t ts = micros64();
+    uint64_t ts = micros64();
 
-        if (ts >= next_1hz_service_at_) {
-            next_1hz_service_at_ += 1000000ULL;
-            send_NodeStatus();
-        }
+    if (ts >= next_1hz_service_at_) {
+        next_1hz_service_at_ += 1000000ULL;
+        send_NodeStatus();
+    }
 
-        canard_iface_.process(1);
+    canard_iface_.process(1);
 }
 
 void DroneCanNode::set_esc_raw(const int16_t raw_value[NUM_ESCS])
@@ -73,6 +81,12 @@ const uavcan_equipment_esc_Status &msg)
     if(msg.esc_index != prev_ecs_index_) {
         esc_count_++;
     }
+    else if(NUM_ESCS == 1)
+    {
+        esc_count_ = 1;
+    }
+
+    printf("%d \n", esc_count_);
 
     actual_rpm_[msg.esc_index] = msg.rpm;
     actual_current_[msg.esc_index] = msg.current;
@@ -84,23 +98,23 @@ const uavcan_equipment_esc_Status &msg)
 
         printf("Voltage: %lf\n", msg.voltage);
 
-        printf("Current: %lf %lf %lf %lf\n",
-        actual_current_[0],
-        actual_current_[1],
-        actual_current_[2],
-        actual_current_[3]);
+        printf("Current:");
 
-        printf("Actual RPM: %d %d %d %d\n", 
-        actual_rpm_[0],
-        actual_rpm_[1], 
-        actual_rpm_[2], 
-        actual_rpm_[3]);
+        for(size_t i = 0; i < NUM_ESCS; i++)
+            printf(" %lf ", actual_current_[i]);
+        printf("\n");
 
-        printf("Command Raw: %d %d %d %d\n",
-        raw_value_[0],
-        raw_value_[1],
-        raw_value_[2],
-        raw_value_[3]);
+        printf("Actual RPM:");
+
+        for(size_t i = 0; i < NUM_ESCS; i++)
+            printf(" %d ", actual_rpm_[i]);
+        printf("\n");
+
+        printf("Command Raw: ");
+
+        for(size_t i = 0; i < NUM_ESCS; i++)
+            printf(" %d ", raw_value_[i]);
+        printf("\n");
 
         voltage_ = msg.voltage;
 
