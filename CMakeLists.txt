@@ -82,6 +82,7 @@ add_library(canard STATIC ${CANARD_SRC})
 add_library(dsdl_generated STATIC ${DSDL_GENERATED_SRC} ${CANARD_INCLUDE})
 
 
+# Multithreading version
 add_executable(ros_libcanard_node 
 src/ros_libcanard_node.cpp
 include/ros_libcanard/ros_wrapper_libcanard.cpp
@@ -89,3 +90,15 @@ include/canard_interface/canard_interface.cpp
 include/canard_interface/drone_can_node.cpp)
 
 target_link_libraries(ros_libcanard_node ${catkin_LIBRARIES} canard dsdl_generated)
+
+# No multithreading version
+add_executable(ros_libcanard_node_v2
+src/ros_libcanard_node_v2
+include/ros_libcanard/ros_libcanard.cpp
+include/canard_interface/canard_interface.cpp
+)
+
+target_link_libraries(ros_libcanard_node_v2 
+${catkin_LIBRARIES}
+canard
+dsdl_generated)

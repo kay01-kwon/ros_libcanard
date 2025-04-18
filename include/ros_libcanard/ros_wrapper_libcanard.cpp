@@ -80,7 +80,7 @@ void RosWrapperLibcanard::callback_cmd_raw(const ros_libcanard::cmd_raw::ConstPt
         raw_value[i] = cmd_msg->raw[i];
     }
     drone_can_node_.set_esc_raw(raw_value);
-
+    drone_can_node_.broadcast_RawCommand(raw_value);
 }
 
 void RosWrapperLibcanard::ros_run()
@@ -98,7 +98,10 @@ void RosWrapperLibcanard::process_drone_can_process()
 {
     while(ros::ok())
     {
-        boost::lock_guard<boost::mutex> lock(mtx_);
+        //boost::lock_guard<boost::mutex> lock(mtx_);
+	mtx_.lock();
+	//printf("Process node\n");
         drone_can_node_.process_node();
+	mtx_.unlock();
     }
 }

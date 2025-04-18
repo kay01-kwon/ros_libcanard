@@ -21,6 +21,7 @@ class DroneCanNode
 
         void get_voltage(float &voltage) const;
 
+	void broadcast_RawCommand(int16_t throttle[NUM_ESCS]);
 
     private:
 
@@ -41,8 +42,6 @@ class DroneCanNode
         void send_NodeStatus();
 
         void broadcast_RPMCommand(int32_t rpm[NUM_ESCS]);
-
-        void broadcast_RawCommand(int16_t throttle[NUM_ESCS]);
         
         uavcan_protocol_NodeStatus node_status_msg_;
         uavcan_equipment_esc_RPMCommand rpm_cmd_;

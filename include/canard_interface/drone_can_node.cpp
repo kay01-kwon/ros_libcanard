@@ -55,7 +55,7 @@ void DroneCanNode::process_node()
         send_NodeStatus();
     }
 
-    canard_iface_.process(1);
+    canard_iface_.process(10);
 }
 
 void DroneCanNode::set_esc_raw(const int16_t raw_value[NUM_ESCS])
@@ -78,6 +78,7 @@ void DroneCanNode::get_voltage(float &voltage) const
 void DroneCanNode::handle_EscStatus(const CanardRxTransfer &transfer, 
 const uavcan_equipment_esc_Status &msg)
 {
+    /**
     if(msg.esc_index != prev_ecs_index_) {
         esc_count_++;
     }
@@ -85,14 +86,14 @@ const uavcan_equipment_esc_Status &msg)
     {
         esc_count_ = 1;
     }
-
-    printf("%d \n", esc_count_);
-
+    **/
     actual_rpm_[msg.esc_index] = msg.rpm;
     actual_current_[msg.esc_index] = msg.current;
 
+    /**
     if(esc_count_ == NUM_ESCS) {
         esc_count_ = 0;
+    **/
 
         printf("\n");
 
@@ -117,11 +118,13 @@ const uavcan_equipment_esc_Status &msg)
         printf("\n");
 
         voltage_ = msg.voltage;
+        
+	//canard_iface_.process(1);
 
-        broadcast_RawCommand(raw_value_);
+        //broadcast_RawCommand(raw_value_);
 
         printf("****************************************\n");
-    }
+    //}
 
 }
 
