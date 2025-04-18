@@ -81,10 +81,11 @@ void RosLibcanard::run()
             next_1hz_service_at += 1000000ULL;
             send_NodeStatus();
         }
-        canard_iface_.process(10);
+        canard_iface_.process(1);
         
+        // printf("ros %f \n",ros::Time::now().toSec());
+
         ros::spinOnce();
-        loop_rate.sleep();
     }
 }
 
@@ -98,16 +99,16 @@ const uavcan_equipment_esc_Status &msg)
     // Get rpm msg
     ros_rpm_msg_.rpm[msg.esc_index] = msg.rpm;
     esc_count_++;
-    
-    // Get voltage msg
-    ros_voltage_msg_.data = msg.voltage;
-    ros_voltage_publisher_.publish(ros_voltage_msg_);
 
     if(esc_count_ == NUM_ESC_)
     {
+        // printf("Handle esc status:  %f \n",ros::Time::now().toSec());
+        ros_voltage_msg_.data = msg.voltage;
+        ros_voltage_publisher_.publish(ros_voltage_msg_);
         ros_rpm_publisher_.publish(ros_rpm_msg_);
         esc_count_ = 0;
     }
+    loop_rate.sleep();
 
 }
 

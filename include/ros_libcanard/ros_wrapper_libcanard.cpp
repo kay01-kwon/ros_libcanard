@@ -2,10 +2,10 @@
 
 RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh) : drone_can_node_{}
 {
-    actual_rpm_pub_ = nh.advertise<ros_libcanard::actual_rpm>("actual_rpm", 1);
-    voltage_pub_ = nh.advertise<std_msgs::Float32>("voltage", 1);
+    actual_rpm_pub_ = nh.advertise<ros_libcanard::actual_rpm>("/uav/actual_rpm", 1);
+    voltage_pub_ = nh.advertise<std_msgs::Float32>("/uav/voltage", 1);
 
-    raw_value_sub_ = nh.subscribe<ros_libcanard::cmd_raw>("cmd_raw", 
+    raw_value_sub_ = nh.subscribe<ros_libcanard::cmd_raw>("/uav/cmd_raw", 
     1, 
     &RosWrapperLibcanard::callback_cmd_raw, 
     this);
@@ -21,10 +21,10 @@ RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh) : drone_can_node_{
 
 RosWrapperLibcanard::RosWrapperLibcanard(ros::NodeHandle &nh, const char *interface_name) : drone_can_node_{}
 {
-    actual_rpm_pub_ = nh.advertise<ros_libcanard::actual_rpm>("actual_rpm", 1);
-    voltage_pub_ = nh.advertise<std_msgs::Float32>("voltage", 1);
+    actual_rpm_pub_ = nh.advertise<ros_libcanard::actual_rpm>("/uav/actual_rpm", 1);
+    voltage_pub_ = nh.advertise<std_msgs::Float32>("/uav/voltage", 1);
     
-    raw_value_sub_ = nh.subscribe<ros_libcanard::cmd_raw>("cmd_raw", 
+    raw_value_sub_ = nh.subscribe<ros_libcanard::cmd_raw>("/uav/cmd_raw", 
     1, 
     &RosWrapperLibcanard::callback_cmd_raw, 
     this);
