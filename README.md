@@ -1,5 +1,17 @@
 # ros_libcanard
 
+## System construction
+
+<img src="figures/System.jpg"/>
+
+## Wiring
+
+<img src="figures/uavcan_wiring.jpg"/>
+
+## Concept
+
+<img src="figures/uavcan_ros_concept.jpg"/>
+
 ## build
 
 Navigate to the directory (~/catkin_ws), then do catkin_make.
