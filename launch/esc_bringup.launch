@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="ros_libcanard" type="ros_libcanard_node_v2" name="ros_libcanard_v2" output="screen"/>
+        <param name="NUM_ESC" type="int" value="4"/>
+        <param name="if_name" type="str" value="can0"/>
+
+</launch>
