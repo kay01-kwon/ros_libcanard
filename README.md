@@ -39,7 +39,7 @@ roscore
 Terminal 2
 
 ```
-rosrun ros_libcanard ros_libcanard_node
+roslaunch ros_libcanard esc_bringup.launch
 ```
 
 
