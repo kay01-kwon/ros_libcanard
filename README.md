@@ -45,7 +45,7 @@ rosrun ros_libcanard ros_libcanard_node
 
 Terminal 3
 ```
-rostopic pub -r 200 /cmd_raw ros_libcanard/cmd_raw "stamp:
+rostopic pub -r 200 /uav/cmd_raw ros_libcanard/cmd_raw "stamp:
   secs: 0
   nsecs: 0
 raw:
@@ -58,10 +58,18 @@ raw:
 How to get actual rpm info in real time
 
 ```
-rostopic echo /actual_rpm
+rostopic echo /uav/actual_rpm
+```
+
+```
+rostopic hz /uav/actual_rpm
 ```
 
 How to get voltage info in real time
 ```
-rostopic echo /voltage
+rostopic echo /uav/voltage
+```
+
+```
+rostopic hz /uav/voltage
 ```
