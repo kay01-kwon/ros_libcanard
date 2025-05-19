@@ -7,8 +7,12 @@
 #include <iostream>
 #include <ros/ros.h>
 
-#include "ros_libcanard/actual_rpm.h"
-#include "ros_libcanard/cmd_raw.h"
+// #include "ros_libcanard/actual_rpm.h"
+// #include "ros_libcanard/cmd_raw.h"
+
+#include "ros_libcanard/hexa_actual_rpm.h"
+#include "ros_libcanard/hexa_cmd_raw.h"
+
 #include <std_msgs/Float32.h>
 
 class RosLibcanard{
@@ -78,7 +82,8 @@ class RosLibcanard{
         ros::Subscriber ros_cmd_raw_subscriber_;
 
         std_msgs::Float32 ros_voltage_msg_;
-        ros_libcanard::actual_rpm ros_rpm_msg_;
+        // ros_libcanard::actual_rpm ros_rpm_msg_;
+        ros_libcanard::hexa_actual_rpm ros_rpm_msg_;
 
         uint8_t esc_count_{0};
 
@@ -86,7 +91,7 @@ class RosLibcanard{
 
         ros::Time last_pub_time_;
 
-        void callback_cmd_raw(const ros_libcanard::cmd_raw::ConstPtr &msg);
+        void callback_cmd_raw(const ros_libcanard::hexa_cmd_raw::ConstPtr &msg);
 
 
 };

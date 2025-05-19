@@ -57,9 +57,9 @@ RosLibcanard::RosLibcanard(ros::NodeHandle &nh)
 
     
     // Set Publisher and Subscriber for ROS
-    ros_rpm_publisher_ = nh.advertise<ros_libcanard::actual_rpm>("/uav/actual_rpm",1);
+    ros_rpm_publisher_ = nh.advertise<ros_libcanard::hexa_actual_rpm>("/uav/actual_rpm",1);
     ros_voltage_publisher_ = nh.advertise<std_msgs::Float32>("/uav/voltage",1);
-    ros_cmd_raw_subscriber_ = nh.subscribe<ros_libcanard::cmd_raw>(
+    ros_cmd_raw_subscriber_ = nh.subscribe<ros_libcanard::hexa_cmd_raw>(
         "/uav/cmd_raw",
         1,
         &RosLibcanard::callback_cmd_raw,
@@ -143,7 +143,7 @@ void RosLibcanard::send_NodeStatus()
     uavcan_node_status_publisher_.broadcast(uavcan_node_status_msg_);
 }
 
-void RosLibcanard::callback_cmd_raw(const ros_libcanard::cmd_raw::ConstPtr &msg)
+void RosLibcanard::callback_cmd_raw(const ros_libcanard::hexa_cmd_raw::ConstPtr &msg)
 {
     for(size_t i = 0; i < NUM_ESC_; i++)
     {

@@ -48,9 +48,9 @@ add_message_files(
   FILES
   cmd_raw.msg
   actual_rpm.msg
+  hexa_actual_rpm.msg
+  hexa_cmd_raw.msg
 )
-
-
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
